@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Soft Task - Unified Neumorphism</title>
+    <title>Soft Task - Template Engine</title>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <div id="sync-info"></div>
+    <div id="sync-info">Connecting...</div>
 
     <div id="login-overlay">
         <div class="login-card">
@@ -22,67 +22,102 @@
     </div>
 
     <div id="main-app">
-        <header>
-            <div>
-                <h2 style="font-size: 24px;">Workspace</h2>
-                <p id="user-display" style="font-size: 11px; opacity:0.6; margin-top:4px;"></p>
+        <nav class="bottom-nav">
+            <button class="nav-item active" id="nav-tasks"><i class="fas fa-tasks"></i><span>Tasks</span></button>
+            <button class="nav-item" id="nav-templates"><i class="fas fa-layer-group"></i><span>Templates</span></button>
+        </nav>
+
+        <section id="screen-tasks" class="screen active">
+            <header>
+                <div>
+                    <h2>Workspace</h2>
+                    <p id="user-display" style="font-size: 11px; opacity:0.6; margin-top:4px;"></p>
+                </div>
+                <button class="neu-btn" id="dark-mode-toggle" style="width:45px; height:45px; border-radius:12px;">
+                    <i class="fas fa-adjust"></i>
+                </button>
+            </header>
+
+            <div class="stats-panel">
+                <div class="stat-item">Done<span id="stat-done">0</span></div>
+                <div class="stat-item">Overdue<span id="stat-overdue" style="color:var(--accent-red)">0</span></div>
+                <div class="stat-item">Active<span id="stat-remain">0</span></div>
             </div>
-            <button class="neu-btn" id="dark-mode-toggle" style="width:45px; height:45px; border-radius:12px;">
-                <i class="fas fa-adjust"></i>
-            </button>
-        </header>
 
-        <div class="stats-panel">
-            <div class="stat-item">Done<span id="stat-done">0</span></div>
-            <div class="stat-item">Overdue<span id="stat-overdue" style="color:var(--accent-red)">0</span></div>
-            <div class="stat-item">Active<span id="stat-remain">0</span></div>
-        </div>
+            <div class="toolbar" id="filter-toolbar">
+                <div class="neu-btn chip selected" data-filter="all">All</div>
+                <div class="neu-btn chip" data-filter="work">Work</div>
+                <div class="neu-btn chip" data-filter="personal">Personal</div>
+                <div class="neu-btn chip" data-filter="shopping">Shopping</div>
+            </div>
 
-        <div class="toolbar" id="filter-toolbar">
-            <div class="neu-btn chip selected" data-filter="all">All</div>
-            <div class="neu-btn chip" data-filter="work">Work</div>
-            <div class="neu-btn chip" data-filter="personal">Personal</div>
-            <div class="neu-btn chip" data-filter="shopping">Shopping</div>
-        </div>
+            <ul id="task-list"></ul>
+        </section>
 
-        <ul id="task-list"></ul>
+        <section id="screen-templates" class="screen">
+            <header>
+                <h2>Templates</h2>
+            </header>
+            <div id="template-list"></div>
+        </section>
+
+        <section id="screen-template-detail" class="screen">
+            <header>
+                <button class="neu-btn" id="back-to-templates" style="width:40px; height:40px; border-radius:10px;">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+                <h2 id="current-template-name" style="margin-left:15px;">Detail</h2>
+            </header>
+            <div id="template-item-list"></div>
+        </section>
     </div>
 
     <div class="modal-overlay" id="modal">
         <div class="modal-content">
-            <h3 style="text-align:center; margin-bottom:15px;">Task Details</h3>
-            <input type="text" id="task-input" class="neu-input" placeholder="Task Title">
+            <h3 id="modal-title" style="text-align:center; margin-bottom:15px;">Edit</h3>
             
-            <div style="display:flex; gap:12px">
-                <select id="task-priority" class="neu-input">
-                    <option value="high">High</option>
-                    <option value="medium" selected>Medium</option>
-                    <option value="low">Low</option>
-                </select>
-                <select id="task-category" class="neu-input">
-                    <option value="none">General</option>
-                    <option value="work">Work</option>
-                    <option value="personal">Personal</option>
-                    <option value="shopping">Shopping</option>
+            <div id="template-selector-area" style="margin-bottom:15px; display:none;">
+                <label style="font-size:11px; opacity:0.6; margin-left:10px;">Use Template?</label>
+                <select id="use-template-select" class="neu-input">
+                    <option value="">-- Manual Create --</option>
                 </select>
             </div>
 
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-top:15px;">
-                <button class="neu-btn" id="prev-month" style="width:40px; height:40px; border-radius:10px;"><i class="fas fa-chevron-left"></i></button>
-                <span id="cal-label" style="font-weight:bold; font-size:14px;"></span>
-                <button class="neu-btn" id="next-month" style="width:40px; height:40px; border-radius:10px;"><i class="fas fa-chevron-right"></i></button>
+            <div id="editor-fields">
+                <input type="text" id="main-input" class="neu-input" placeholder="Title">
+                <div style="display:flex; gap:12px">
+                    <select id="main-priority" class="neu-input">
+                        <option value="high">High</option>
+                        <option value="medium" selected>Medium</option>
+                        <option value="low">Low</option>
+                    </select>
+                    <select id="main-category" class="neu-input">
+                        <option value="none">General</option>
+                        <option value="work">Work</option>
+                        <option value="personal">Personal</option>
+                        <option value="shopping">Shopping</option>
+                    </select>
+                </div>
+
+                <div id="calendar-container">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-top:15px;">
+                        <button class="neu-btn" id="prev-month" style="width:35px; height:35px;"><i class="fas fa-chevron-left"></i></button>
+                        <span id="cal-label" style="font-size:14px; font-weight:bold;"></span>
+                        <button class="neu-btn" id="next-month" style="width:35px; height:35px;"><i class="fas fa-chevron-right"></i></button>
+                    </div>
+                    <div class="cal-grid" id="cal-grid"></div>
+                </div>
             </div>
-            <div class="cal-grid" id="cal-grid"></div>
 
             <div style="display:flex; gap:15px; margin-top:25px">
                 <button class="neu-btn" id="cancel-btn" style="flex:1; padding:15px;">CANCEL</button>
                 <button class="neu-btn" id="save-btn" style="flex:1; padding:15px; color:var(--accent-blue)">SAVE</button>
             </div>
-            <button id="del-btn" class="neu-btn" style="width:100%; margin-top:15px; padding:12px; color:var(--accent-red); display:none">DELETE TASK</button>
+            <button id="del-btn" class="neu-btn" style="width:100%; margin-top:15px; padding:12px; color:var(--accent-red); display:none">DELETE</button>
         </div>
     </div>
 
-    <button class="fab neu-btn" id="add-task-fab"><i class="fas fa-plus"></i></button>
+    <button class="fab neu-btn" id="fab-add"><i class="fas fa-plus"></i></button>
 
     <script src="script.js"></script>
 </body>
