@@ -3,29 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Soft Task - PWA</title>
-    <link rel="manifest" href="manifest.json">
+    <title>Soft Task - PWA Integrated</title>
+    <link rel="manifest" href="./manifest.json">
     <meta name="theme-color" content="#E0E5EC">
-    <link rel="apple-touch-icon" href="icon-192.png">
+    <link rel="apple-touch-icon" href="./icon-192.png">
     
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
-    <div id="sync-info">Connecting...</div>
+    <div id="sync-info">Syncing...</div>
 
     <div id="login-overlay">
         <div class="login-card">
-            <h1>SOFT TASK</h1>
+            <h1 style="letter-spacing:2px; margin-bottom:30px;">SOFT TASK</h1>
             <input type="text" id="login-id" class="neu-input" placeholder="Username">
             <input type="password" id="login-pw" class="neu-input" placeholder="Password">
             <button class="neu-btn" id="login-btn" style="width:100%; margin-top:20px; padding:18px;">LOGIN</button>
         </div>
     </div>
 
-    <div id="main-app">
+    <div id="main-app" style="display:none;">
         <nav class="bottom-nav">
             <button class="nav-item active" id="nav-tasks"><i class="fas fa-tasks"></i><span>Tasks</span></button>
             <button class="nav-item" id="nav-templates"><i class="fas fa-layer-group"></i><span>Templates</span></button>
@@ -35,7 +34,7 @@
             <header>
                 <div>
                     <h2>Workspace</h2>
-                    <p id="user-display"></p>
+                    <p id="user-display" style="font-size:11px; opacity:0.6;"></p>
                 </div>
                 <button class="neu-btn" id="dark-mode-toggle" style="width:45px; height:45px;"><i class="fas fa-adjust"></i></button>
             </header>
@@ -60,7 +59,7 @@
         <section id="screen-template-detail" class="screen">
             <header>
                 <button class="neu-btn" id="back-to-templates" style="width:40px; height:40px;"><i class="fas fa-chevron-left"></i></button>
-                <h2 id="current-template-name">Detail</h2>
+                <h2 id="current-template-name" style="margin-left:15px;">Detail</h2>
             </header>
             <div id="template-item-list"></div>
         </section>
@@ -68,9 +67,10 @@
 
     <div class="modal-overlay" id="modal">
         <div class="modal-content">
-            <h3 id="modal-title">Edit</h3>
-            <div id="template-selector-area" style="display:none;">
-                <select id="use-template-select" class="neu-input"><option value="">-- Manual Create --</option></select>
+            <h3 id="modal-title" style="text-align:center; margin-bottom:15px;">Task Details</h3>
+            <div id="template-selector-area" style="margin-bottom:15px; display:none;">
+                <label style="font-size:11px; opacity:0.6; margin-left:10px;">Select Template</label>
+                <select id="use-template-select" class="neu-input"><option value="">-- Manual --</option></select>
             </div>
             <div id="editor-fields">
                 <input type="text" id="main-input" class="neu-input" placeholder="Title">
@@ -87,9 +87,9 @@
                     </select>
                 </div>
                 <div id="calendar-container">
-                    <div style="display:flex; justify-content:space-between; margin-top:15px;">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-top:15px;">
                         <button class="neu-btn" id="prev-month" style="width:35px; height:35px;"><i class="fas fa-chevron-left"></i></button>
-                        <span id="cal-label"></span>
+                        <span id="cal-label" style="font-weight:bold;"></span>
                         <button class="neu-btn" id="next-month" style="width:35px; height:35px;"><i class="fas fa-chevron-right"></i></button>
                     </div>
                     <div class="cal-grid" id="cal-grid"></div>
@@ -107,12 +107,12 @@
 
     <script src="script.js"></script>
     <script>
-        // サービスワーカーの登録
+        // PWA Registration with scope adjustment for GitHub Pages
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
                 navigator.serviceWorker.register('./sw.js')
-                    .then(reg => console.log('SW registered'))
-                    .catch(err => console.log('SW registration failed', err));
+                .then(reg => console.log('SW Registered'))
+                .catch(err => console.log('SW Registration failed', err));
             });
         }
     </script>
