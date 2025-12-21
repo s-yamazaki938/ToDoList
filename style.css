@@ -1,0 +1,108 @@
+:root {
+    --bg-color: #E0E5EC;
+    --text-color: #556075;
+    --shadow-light: #ffffff;
+    --shadow-dark: #b8bec7; 
+    --accent-blue: #8a99d1;
+    --accent-red: #d18a8a;
+    --accent-yellow: #d1c18a;
+}
+
+body.dark-mode {
+    --bg-color: #2C2F33;
+    --text-color: #CFD8DC;
+    --shadow-light: #383c41;
+    --shadow-dark: #1a1c20;
+}
+
+* { 
+    box-sizing: border-box; margin: 0; padding: 0; user-select: none; 
+    outline: none; border: none; 
+    transition: background 0.4s, box-shadow 0.2s, color 0.4s; 
+}
+
+body { 
+    background: var(--bg-color); color: var(--text-color); 
+    font-family: 'Helvetica Neue', Arial, sans-serif; 
+    display: flex; flex-direction: column; align-items: center; min-height: 100vh; 
+}
+
+/* --- Neumorphism Elements --- */
+.neu-btn {
+    background: var(--bg-color);
+    box-shadow: 6px 6px 12px var(--shadow-dark), -6px -6px 12px var(--shadow-light);
+    border-radius: 15px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-color);
+    font-weight: bold;
+}
+
+.neu-btn:active {
+    box-shadow: inset 4px 4px 8px var(--shadow-dark), inset -4px -4px 8px var(--shadow-light);
+    transform: scale(0.98);
+}
+
+.neu-btn.selected {
+    box-shadow: inset 3px 3px 6px var(--shadow-dark), inset -3px -3px 6px var(--shadow-light);
+    color: var(--accent-blue);
+}
+
+.neu-input {
+    width: 100%; padding: 15px; margin: 12px 0; border-radius: 15px; font-size: 15px; 
+    background: var(--bg-color); box-shadow: inset 4px 4px 8px var(--shadow-dark), inset -4px -4px 8px var(--shadow-light);
+    color: var(--text-color); 
+}
+
+/* --- Layouts --- */
+#login-overlay { 
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+    background: var(--bg-color); display: flex; align-items: center; justify-content: center; z-index: 1000; 
+}
+.login-card { 
+    padding: 50px 40px; width: 90%; max-width: 380px; text-align: center;
+    background: var(--bg-color);
+    box-shadow: 10px 10px 20px var(--shadow-dark), -10px -10px 20px var(--shadow-light);
+    border-radius: 30px;
+}
+
+#main-app { display: none; width: 100%; max-width: 500px; padding: 25px; }
+header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; }
+
+.stats-panel { 
+    display: flex; justify-content: space-around; padding: 20px; margin-bottom: 30px; 
+    background: var(--bg-color); border-radius: 20px;
+    box-shadow: 8px 8px 16px var(--shadow-dark), -8px -8px 16px var(--shadow-light);
+}
+.stat-item { text-align: center; font-size: 11px; font-weight: bold; }
+.stat-item span { display: block; font-size: 20px; color: var(--accent-blue); margin-top: 5px; }
+
+.toolbar { display: flex; gap: 12px; margin-bottom: 25px; overflow-x: auto; padding: 10px 5px; }
+.chip { padding: 10px 20px; min-width: 80px; }
+
+/* --- Task Cards --- */
+.task-card { 
+    padding: 22px; margin-bottom: 25px; cursor: pointer; position: relative;
+    background: var(--bg-color);
+    box-shadow: 8px 8px 16px var(--shadow-dark), -8px -8px 16px var(--shadow-light);
+    border-left: 6px solid transparent; border-radius: 20px;
+}
+.task-card.priority-high { border-left-color: var(--accent-red); }
+.task-card.priority-medium { border-left-color: var(--accent-yellow); }
+.task-card.priority-low { border-left-color: var(--accent-blue); }
+.task-card.completed { box-shadow: inset 4px 4px 10px var(--shadow-dark), inset -4px -4px 10px var(--shadow-light); opacity: 0.7; }
+
+/* --- Modal & Calendar --- */
+.modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.02); backdrop-filter: blur(10px); display: none; align-items: center; justify-content: center; z-index: 200; }
+.modal-overlay.active { display: flex; }
+.modal-content { background: var(--bg-color); padding: 30px; border-radius: 35px; width: 90%; max-width: 420px; box-shadow: 20px 20px 60px var(--shadow-dark), -20px -20px 60px var(--shadow-light); }
+
+.cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; text-align: center; margin-top: 15px; }
+.cal-day { padding: 10px 0; font-size: 13px; border-radius: 10px; cursor: pointer; }
+.cal-day.selected { box-shadow: inset 2px 2px 5px var(--shadow-dark), inset -2px -2px 5px var(--shadow-light); color: var(--accent-blue); font-weight: bold; }
+
+/* --- Floating Button & Info --- */
+.fab { position: fixed; bottom: 40px; right: 30px; width: 65px; height: 65px; border-radius: 50%; font-size: 26px; z-index: 100; }
+#sync-info { position: fixed; top: 10px; font-size: 9px; opacity: 0.5; }
