@@ -50,6 +50,8 @@ header { display: flex; justify-content: space-between; align-items: center; mar
 .chip { padding: 10px 18px; min-width: 80px; }
 .task-card, .template-card { padding: 20px; margin-bottom: 20px; border-radius: 20px; background: var(--bg-color); box-shadow: 8px 8px 16px var(--shadow-dark), -8px -8px 16px var(--shadow-light); position: relative; }
 .task-card.priority-high { border-left: 6px solid var(--accent-red); }
+.task-card.priority-medium { border-left: 6px solid var(--accent-blue); }
+.task-card.priority-low { border-left: 6px solid #7cb342; }
 .task-card.completed { opacity: 0.5; box-shadow: inset 4px 4px 8px var(--shadow-dark); }
 .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.05); backdrop-filter: blur(8px); display: none; align-items: center; justify-content: center; z-index: 200; }
 .modal-overlay.active { display: flex; }
