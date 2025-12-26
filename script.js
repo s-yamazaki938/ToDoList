@@ -2,12 +2,16 @@ const SB_URL = 'https://tpemermrrxgdxppzewpn.supabase.co';
 const SB_KEY = 'sb_publishable_zr76EeMU58HUMoJJivdDoQ_Hflm3xX8';
 const client = supabase.createClient(SB_URL, SB_KEY);
 
-let userObj = null, tasks = [], templates = [], currentFilter = 'all';
+let userObj = { id: 1, user_id: 'user' }, tasks = [], templates = [], currentFilter = 'all';
 let currentScreen = 'screen-tasks', currentTemplateId = null, editingId = null;
 let currentMode = 'task', selectedDate = new Date().toISOString().split('T')[0], calDate = new Date();
 
 document.addEventListener('DOMContentLoaded', () => {
-    document.getElementById('login-btn').onclick = handleLogin;
+    // ログイン処理をスキップし、直接アプリを初期化
+    document.getElementById('login-overlay').style.display = 'none';
+    document.getElementById('main-app').style.display = 'block';
+    document.getElementById('user-display').innerText = `User: ${userObj.user_id}`;
+    
     document.getElementById('dark-mode-toggle').onclick = () => document.body.classList.toggle('dark-mode');
     document.getElementById('nav-tasks').onclick = () => switchScreen('screen-tasks');
     document.getElementById('nav-templates').onclick = () => switchScreen('screen-templates');
@@ -30,17 +34,12 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('use-template-select').onchange = (e) => {
         document.getElementById('editor-fields').style.display = e.target.value ? 'none' : 'block';
     };
+    
+    // 初期画面を表示
+    switchScreen('screen-tasks');
 });
 
-async function handleLogin() {
-    const uid = document.getElementById('login-id').value, upw = document.getElementById('login-pw').value;
-    const { data, error } = await client.from('users').select('*').eq('user_id', uid).eq('password', upw).single();
-    if (error) return alert("Login Failed");
-    userObj = data; document.getElementById('login-overlay').style.display = 'none';
-    document.getElementById('main-app').style.display = 'block';
-    document.getElementById('user-display').innerText = `User: ${userObj.user_id}`;
-    switchScreen('screen-tasks');
-}
+
 
 function switchScreen(id) {
     currentScreen = id;
@@ -62,7 +61,7 @@ function renderTasks() {
     tasks.filter(t => currentFilter === 'all' || t.category === currentFilter).forEach(t => {
         const div = document.createElement('div');
         div.className = `task-card priority-${t.priority} ${t.is_completed ? 'completed' : ''}`;
-        div.innerHTML = `<div style="flex:1" onclick="toggleTask(${t.id}, ${t.is_completed})"><strong>${t.task_title}</strong><br><small>${t.limit_date}</small></div>
+        div.innerHTML = `<div style="flex:1" onclick="toggleTask(${t.id}, ${t.is_completed})"><strong>${t.task_title}</strong><br><small>${t.limit_date} • ${t.priority}</small></div>
                          <button class="neu-btn" onclick="openTaskModal(${t.id})" style="width:30px;height:30px;"><i class="fas fa-pen"></i></button>`;
         list.appendChild(div);
     });
